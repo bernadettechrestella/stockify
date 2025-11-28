@@ -1,5 +1,6 @@
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 exports.register = (req, res) => {
   const { name, email, password } = req.body;
@@ -32,8 +33,6 @@ exports.register = (req, res) => {
   });
 };
 
-const jwt = require("jsonwebtoken");
-
 exports.login = (req, res) => {
   const { email, password } = req.body;
 
@@ -58,17 +57,62 @@ exports.login = (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Generate JWT Token
-    const token = jwt.sign(
+    //Access token (short-lived)
+    const accessToken = jwt.sign(
       { id: user.id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "15m" }
     );
+
+    //Refresh token (long-lived)
+    const refreshToken = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_REFRESH_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    //send refresh token via httpOnly cookie
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: false, // set to true in production
+      sameSite: "Strict",
+      path: "/",
+    });
 
     return res.status(200).json({
       message: "Login successful",
-      token,
+      accessToken,
     });
   });
 };
+
+exports.refresh = (req, res) => {
+  const token = req.cookies.refreshToken;
+
+  if (!token) return res.status(401).json({ message: "No refresh token" });
+
+  jwt.verify(token, process.env.JWT_REFRESH_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: "Invalid refresh token" });
+
+    const accessToken = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    return res.json({ accessToken });
+  });
+};
+
+exports.logout = (req, res) => {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "strict",
+    path: "/"
+  });
+
+  return res.json({ message: "Logout successful" });
+};
+
 

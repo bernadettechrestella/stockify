@@ -1,11 +1,15 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const db = require("./config/db");
+const cookieParser = require("cookie-parser");
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:5173", // sesuaikan dengan frontend URL
+    credentials: true,
+}));
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes Import
 const authRoutes = require("./routes/authRoutes");

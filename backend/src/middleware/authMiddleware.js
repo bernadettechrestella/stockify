@@ -20,7 +20,10 @@ const authMiddleware = (req, res, next) => {
   // 3. Verifikasi token
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
-      return res.status(403).json({ message: "Invalid or expired token" });
+      if (err.name === "TokenExpiredError") {
+        return res.status(403).json({ message: "Token expired" });
+      }
+      return res.status(403).json({ message: "Invalid token" });
     }
 
     // 4. Token valid → simpan data user ke req.user
