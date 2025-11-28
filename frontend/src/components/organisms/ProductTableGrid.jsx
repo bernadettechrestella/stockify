@@ -30,7 +30,6 @@ export default function ProductTableGrid({ rows, onEdit, onDelete, isMobile }) {
     {
       field: "stock",
       headerName: "Stock",
-      type: "number",
       headerAlign: "center",
       align: "center",
       flex: 0.7,
@@ -38,10 +37,14 @@ export default function ProductTableGrid({ rows, onEdit, onDelete, isMobile }) {
     {
       field: "price",
       headerName: "Price",
-      type: "number",
       headerAlign: "center",
-      align: "center",
+      align: "right",
       flex: 1,
+      renderCell: (params) => {
+        const value = Number(params.value);
+        if (isNaN(value)) return params.value;
+        return `Rp${value.toLocaleString("id-ID")}`;
+      },
     },
     {
       field: "actions",
@@ -66,6 +69,7 @@ export default function ProductTableGrid({ rows, onEdit, onDelete, isMobile }) {
       pageSize={6}
       disableSelectionOnClick
       autoHeight
+      hideFooterSelectedRowCount
       getRowClassName={(params) => {
         return params.row.stock <= 5 ? "low-stock" : "";
       }}
@@ -95,6 +99,9 @@ export default function ProductTableGrid({ rows, onEdit, onDelete, isMobile }) {
           transition: "0.2s",
           background: "transparent",
         },
+        "& .Mui-selected": {
+          background: "transparent !important",
+        },
         "& .MuiDataGrid-row:hover": {
           backgroundColor:
             theme.palette.mode === "dark"
@@ -116,18 +123,22 @@ export default function ProductTableGrid({ rows, onEdit, onDelete, isMobile }) {
           borderTop: "none",
         },
         "& .low-stock": {
-          backgroundColor:
+          background:
             theme.palette.mode === "dark"
-              ? "rgba(255,0,0,0.08)"
-              : "rgba(255,0,0,0.06)",
-          color: theme.palette.mode === "dark" ? "#ffb3b3" : "#b30000",
+              ? "linear-gradient(90deg, #ffb3b3 0%, #ff80ab 100%)"
+              : "linear-gradient(90deg, #ffe3ec 0%, #ffd6e0 100%)",
+          color: theme.palette.mode === "dark" ? "#d32f2f" : "#ad1457",
           fontWeight: 600,
+          boxShadow:
+            theme.palette.mode === "dark"
+              ? "0 2px 8px #ff80ab33"
+              : "0 2px 8px #ffd6e033",
         },
         "& .low-stock:hover": {
-          backgroundColor:
+          background:
             theme.palette.mode === "dark"
-              ? "rgba(255,0,0,0.15)"
-              : "rgba(255,0,0,0.12)",
+              ? "linear-gradient(90deg, #ff80ab 0%, #ffb3b3 100%)"
+              : "linear-gradient(90deg, #ffd6e0 0%, #ffe3ec 100%)",
           transform: "scale(1.002)",
         },
       }}

@@ -129,6 +129,7 @@ export default function ProductTableTemplate({
 
           <ProductSelectCategory
             categories={categories}
+            label="Filter by Category"
             value={categoryId}
             onChange={(e) => {
               setCategoryId(e.target.value);

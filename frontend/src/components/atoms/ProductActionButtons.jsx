@@ -9,6 +9,7 @@ export default function ProductActionButtons({ onEdit, onDelete }) {
       spacing={0.5}
       justifyContent="center"
       alignItems="center"
+      sx={{ minHeight: 40, alignSelf: "center", mt: 0.5 }}
     >
       <IconButton
         color="primary"

@@ -4,12 +4,13 @@ export default function ProductSelectCategory({
   categories,
   value,
   onChange,
+  label,
   ...props
 }) {
   return (
     <TextField
       select
-      label="Category"
+      label={label}
       value={value}
       onChange={onChange}
       {...props}

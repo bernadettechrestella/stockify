@@ -12,19 +12,14 @@ export default function DashboardPage() {
       <Box
         sx={{
           minHeight: "100vh",
-          background:
-            theme.palette.mode === "light"
-              ? "linear-gradient(120deg, #e3f2fd 0%, #90caf9 100%)"
-              : "linear-gradient(120deg, #23272f 0%, #1976d2 100%)",
+          background: theme.palette.mode === "light" ? "#fff" : "#23272f",
           pt: 10,
           pb: 6,
         }}
       >
         <Container maxWidth="lg">
-          {/* StatsCards di atas, lebar penuh */}
           <StatsCards />
 
-          {/* Section Product Management */}
           <Paper
             elevation={6}
             sx={{
@@ -33,6 +28,9 @@ export default function DashboardPage() {
               bgcolor: theme.palette.mode === "dark" ? "#23272f" : "#fff",
               mt: 4,
               boxShadow: "0 8px 32px rgba(25, 118, 210, 0.10)",
+              border: `2px solid ${
+                theme.palette.mode === "dark" ? "#1976d2" : "#90caf9"
+              }`,
               backdropFilter: "blur(2px)",
               transition: "0.3s",
             }}
