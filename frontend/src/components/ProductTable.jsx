@@ -24,6 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 
 import useCategories from "../api/useCategories";
+import { useAuth } from "../context/AuthContext";
 
 export default function ProductTable() {
   const theme = useTheme();
@@ -41,6 +42,7 @@ export default function ProductTable() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const isMobile = useMediaQuery("(max-width: 600px)");
+  const { token, loading: authLoading } = useAuth();
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -59,8 +61,10 @@ export default function ProductTable() {
   }, [search, categoryId]);
 
   useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+    if (!authLoading && token) {
+      fetchProducts();
+    }
+  }, [fetchProducts, authLoading, token]);
 
   const columns = [
     {
@@ -137,7 +141,7 @@ export default function ProductTable() {
     },
   ];
 
-  if (loading)
+  if (authLoading || loading)
     return (
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
         <CircularProgress />

@@ -15,13 +15,21 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import { useContext } from "react";
 import ColorModeContext from "../context/ColorModeContext,js";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
-
+  const { logout } = useAuth();
   // Detect scroll > 0
   const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 0 });
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login", { replace: true });
+  };
 
   return (
     <Slide appear={false} direction="down" in={true}>
@@ -69,7 +77,7 @@ export default function Navbar() {
           </Box>
 
           {/* RIGHT BUTTONS */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
             <IconButton
               onClick={colorMode.toggleColorMode}
               sx={{
@@ -88,8 +96,9 @@ export default function Navbar() {
             </IconButton>
 
             <Button
-              variant="outlined"
+              variant="text"
               endIcon={<LogoutIcon />}
+              onClick={handleLogout}
               sx={{
                 textTransform: "none",
                 borderRadius: "20px",
@@ -108,9 +117,7 @@ export default function Navbar() {
                       : "rgba(0,0,0,0.04)",
                 },
               }}
-            >
-              Logout
-            </Button>
+            ></Button>
           </Box>
         </Toolbar>
       </AppBar>

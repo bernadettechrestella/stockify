@@ -1,17 +1,50 @@
-//semua request ke backend otomatis kirim token
 import axios from "axios";
 
-const axiosInstance = axios.create({
+const instance = axios.create({
   baseURL: "http://localhost:5000/api",
+  withCredentials: true, // <-- penting untuk cookie refresh token
 });
 
-// Attach token automatically
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+// intercept refresh token
+let isRefreshing = false;
+let pendingRequests = [];
+
+instance.interceptors.response.use(
+  (res) => res,
+  async (err) => {
+    const originalRequest = err.config;
+
+    // access token expired
+    if (err.response?.status === 403 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      if (!isRefreshing) {
+        isRefreshing = true;
+
+        const { data } = await instance.post("/auth/refresh");
+        const accessToken = data.accessToken;
+
+        // simpan ke memory global
+        instance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+        pendingRequests.forEach((cb) => cb(accessToken));
+        pendingRequests = [];
+        isRefreshing = false;
+
+        return instance(originalRequest);
+      }
+
+      // queue request
+      return new Promise((resolve) => {
+        pendingRequests.push((token) => {
+          originalRequest.headers["Authorization"] = `Bearer ${token}`;
+          resolve(instance(originalRequest));
+        });
+      });
+    }
+
+    return Promise.reject(err);
   }
-  return config;
-});
+);
 
-export default axiosInstance;
+export default instance;

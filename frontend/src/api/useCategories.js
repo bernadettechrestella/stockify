@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "./axios";
+import { useAuth } from "../context/AuthContext";
 
 export default function useCategories() {
   const [categories, setCategories] = useState([]);
+  const { token, loading: authLoading } = useAuth();
 
   const loadCategories = async () => {
     try {
@@ -14,11 +16,13 @@ export default function useCategories() {
   };
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    if (!authLoading && token) {
+      const fetchCategories = async () => {
       await loadCategories();
     };
     fetchCategories();
-  }, []);
+    } 
+  }, [authLoading, token]);
 
   return categories;
 }

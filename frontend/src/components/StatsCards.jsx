@@ -7,6 +7,7 @@ import {
   Grid,
   useMediaQuery,
 } from "@mui/material";
+import { useAuth } from "../context/AuthContext";
 
 export default function StatsCards() {
   const [stats, setStats] = useState({
@@ -14,18 +15,21 @@ export default function StatsCards() {
     totalCategories: 0,
     lowStock: 0,
   });
+  const { token, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await axios.get("/products/stats");
-        setStats(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchStats();
-  }, []);
+    if (!authLoading && token) {
+      const fetchStats = async () => {
+        try {
+          const res = await axios.get("/products/stats");
+          setStats(res.data);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchStats();
+    }
+  }, [authLoading, token]);
 
   const isMobile = useMediaQuery("(max-width:768px)");
 
