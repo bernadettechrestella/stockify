@@ -43,27 +43,27 @@ export default function StatsCards() {
       label: "Total Products",
       value: stats.totalProducts,
       gradient: "linear-gradient(90deg, #1976d2 0%, #42a5f5 100%)",
-      icon: <Inventory2Icon sx={{ fontSize: 32 }} />,
+      icon: <Inventory2Icon sx={{ fontSize: isMobile ? 22 : 32 }} />,
     },
     {
       label: "Total Categories",
       value: stats.totalCategories,
       gradient: "linear-gradient(90deg, #2e7d32 0%, #66bb6a 100%)",
-      icon: <CategoryIcon sx={{ fontSize: 32 }} />,
+      icon: <CategoryIcon sx={{ fontSize: isMobile ? 22 : 32 }} />,
     },
     {
       label: "Low Stock",
       value: stats.lowStock,
       gradient: "linear-gradient(90deg, #c62828 0%, #ef5350 100%)",
-      icon: <WarningAmberIcon sx={{ fontSize: 32 }} />,
+      icon: <WarningAmberIcon sx={{ fontSize: isMobile ? 22 : 32 }} />,
     },
   ];
 
   return (
-    <Box sx={{ px: isMobile ? 0.5 : 2, py: 2 }}>
+    <Box sx={{ px: isMobile ? 0.5 : 2, py: isMobile ? 1 : 2 }}>
       <Grid
         container
-        spacing={isMobile ? 2 : 4}
+        spacing={isMobile ? 1 : 4}
         justifyContent="center"
         alignItems="stretch"
       >
@@ -74,16 +74,21 @@ export default function StatsCards() {
                 borderRadius: 4,
                 color: "white",
                 background: c.gradient,
-                boxShadow: "0px 6px 18px rgba(25, 118, 210, 0.18)",
+                boxShadow: isMobile
+                  ? "0px 2px 8px rgba(25, 118, 210, 0.10)"
+                  : "0px 6px 18px rgba(25, 118, 210, 0.18)",
                 backdropFilter: "blur(6px)",
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 transition: "0.3s",
+                minHeight: isMobile ? 110 : 160,
                 "&:hover": {
-                  transform: "translateY(-6px) scale(1.03)",
-                  boxShadow: "0px 10px 24px rgba(25, 118, 210, 0.28)",
+                  transform: isMobile ? "none" : "translateY(-6px) scale(1.03)",
+                  boxShadow: isMobile
+                    ? "0px 4px 12px rgba(25, 118, 210, 0.16)"
+                    : "0px 10px 24px rgba(25, 118, 210, 0.28)",
                   opacity: 0.98,
                 },
               }}
@@ -91,17 +96,18 @@ export default function StatsCards() {
               <CardContent
                 sx={{
                   textAlign: "center",
-                  p: isMobile ? 2 : 3.5,
+                  p: isMobile ? 1.2 : 3.5,
+                  pb: isMobile ? 1 : 2.5,
                 }}
               >
                 <Avatar
                   sx={{
                     bgcolor: "rgba(255,255,255,0.18)",
                     color: "#fff",
-                    width: 48,
-                    height: 48,
+                    width: isMobile ? 32 : 48,
+                    height: isMobile ? 32 : 48,
                     mx: "auto",
-                    mb: 1.5,
+                    mb: isMobile ? 0.7 : 1.5,
                     boxShadow: 2,
                     border: "2px solid rgba(255,255,255,0.25)",
                   }}
@@ -113,9 +119,9 @@ export default function StatsCards() {
                   sx={{
                     opacity: 0.92,
                     fontWeight: 600,
-                    fontSize: isMobile ? 15 : 18,
+                    fontSize: isMobile ? 12 : 18,
                     letterSpacing: 0.5,
-                    mb: 0.5,
+                    mb: isMobile ? 0.2 : 0.5,
                     textShadow: "0 2px 8px rgba(0,0,0,0.12)",
                   }}
                 >
@@ -125,8 +131,8 @@ export default function StatsCards() {
                   variant="h3"
                   sx={{
                     fontWeight: 700,
-                    fontSize: isMobile ? 32 : 44,
-                    mt: isMobile ? 0.5 : 1,
+                    fontSize: isMobile ? 22 : 44,
+                    mt: isMobile ? 0.2 : 1,
                     textShadow: "0 2px 12px rgba(0,0,0,0.18)",
                   }}
                 >
