@@ -66,7 +66,12 @@ exports.getProducts = (req, res) => {
 
   db.query(query, params, (err, results) => {
     if (err) return res.status(500).json({ message: err });
-    return res.status(200).json(results);
+    // pastikan price selalu number
+    const formatted = results.map(row => ({
+      ...row,
+      price: row.price !== undefined ? Number(row.price) : row.price
+    }));
+    return res.status(200).json(formatted);
   });
 };
 
