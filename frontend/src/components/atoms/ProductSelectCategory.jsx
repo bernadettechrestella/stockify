@@ -7,6 +7,7 @@ export default function ProductSelectCategory({
   label,
   ...props
 }) {
+  const safeCategories = Array.isArray(categories) ? categories : [];
   return (
     <TextField
       select
@@ -16,7 +17,7 @@ export default function ProductSelectCategory({
       {...props}
     >
       <MenuItem value="">All</MenuItem>
-      {categories.map((c) => (
+      {safeCategories.map((c) => (
         <MenuItem key={c.id} value={c.id}>
           {c.name}
         </MenuItem>

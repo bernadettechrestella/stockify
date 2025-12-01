@@ -9,7 +9,7 @@ export default function useCategories() {
   const loadCategories = async () => {
     try {
       const res = await axios.get("/categories");
-      setCategories(res.data);
+      setCategories(res.data.data);
     } catch (err) {
       alert("Failed to load categories" + (err.response?.data?.message || ""));
     }

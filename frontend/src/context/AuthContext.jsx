@@ -1,21 +1,40 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+  const navigate = useNavigate();
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Saat app load, coba refresh access token
+  useEffect(() => {
+    if (!loading && !token) {
+      navigate("/login");
+    }
+  }, [loading, token, navigate]);
+
   useEffect(() => {
     const getAccessToken = async () => {
+      if (window.location.pathname === "/login") {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const res = await axios.post("/auth/refresh");
-        setToken(res.data.accessToken);
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${res.data.accessToken}`;
+        const res = await axios.post(
+          "/auth/refresh",
+          {},
+          { withCredentials: true }
+        );
+        const accessToken = res.data.data?.accessToken;
+        if (accessToken) {
+          setToken(accessToken);
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${accessToken}`;
+        }
       } catch {
         setToken(null);
       } finally {
@@ -28,6 +47,7 @@ export function AuthProvider({ children }) {
   const login = (newToken) => {
     setToken(newToken);
     axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+    navigate("/");
   };
 
   const logout = async () => {

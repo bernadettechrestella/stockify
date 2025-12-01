@@ -184,12 +184,11 @@ export default function ProductForm({
           <MenuItem value="" disabled>
             Pilih kategori
           </MenuItem>
-          {categories &&
-            categories.map((cat) => (
-              <MenuItem key={cat.id} value={cat.id}>
-                {cat.name}
-              </MenuItem>
-            ))}
+          {(Array.isArray(categories) ? categories : []).map((cat) => (
+            <MenuItem key={cat.id} value={cat.id}>
+              {cat.name}
+            </MenuItem>
+          ))}
         </Select>
       </DialogContent>
       <DialogActions sx={{ p: 0, m: 0 }}>

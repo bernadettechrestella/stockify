@@ -35,8 +35,10 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [notifOpen, setNotifOpen] = useState(false);
   // Ambil data produk dari store dan filter stok rendah
-  const products = useSelector((state) => state.products.items);
-  const lowStockProducts = products.filter((p) => Number(p.stock) <= 5);
+  const products = useSelector((state) => state.products.items) || [];
+  const lowStockProducts = Array.isArray(products)
+    ? products.filter((p) => Number(p.stock) <= 5)
+    : [];
 
   const handleLogout = async () => {
     await logout();

@@ -30,7 +30,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const res = await axios.post("/auth/login", { email, password });
-      const accessToken = res.data.accessToken;
+      const accessToken = res.data.data.accessToken;
       login(accessToken);
       navigate("/", { replace: true });
     } catch (err) {

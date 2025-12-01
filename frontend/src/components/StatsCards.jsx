@@ -27,7 +27,7 @@ export default function StatsCards() {
       const fetchStats = async () => {
         try {
           const res = await axios.get("/products/stats");
-          setStats(res.data);
+          setStats(res.data.data);
         } catch (err) {
           console.error(err);
         }

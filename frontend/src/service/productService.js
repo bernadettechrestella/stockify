@@ -4,7 +4,7 @@ export const fetchProductsApi = async (search, category) => {
   const res = await axios.get('/products', {
     params: { search, category },
   });
-  return res.data;
+  return res.data.data;
 };
 
 export const addProductApi = async (product) => {
