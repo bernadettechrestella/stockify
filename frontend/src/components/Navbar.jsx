@@ -20,7 +20,7 @@ import { useSelector } from "react-redux";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import Inventory2Icon from "@mui/icons-material/Inventory2";
+import stockifyLogo from "../assets/stockify.svg";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useContext, useState } from "react";
 import ColorModeContext from "../context/ColorModeContext,js";
@@ -78,59 +78,14 @@ export default function Navbar() {
         >
           {/* LOGO */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
-            <Avatar
-              sx={{
-                width: 44,
-                height: 44,
-                boxShadow: 3,
-                border: "2.5px solid #fff",
-                background:
-                  theme.palette.mode === "light"
-                    ? "linear-gradient(135deg, #1976d2 60%, #42a5f5 100%)"
-                    : "linear-gradient(135deg, #23272f 60%, #1976d2 100%)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                p: 0.5,
+            <img
+              src={stockifyLogo}
+              alt="Stockify Logo"
+              style={{
+                width: 100,
+                height: 50,
               }}
-            >
-              <Inventory2Icon
-                sx={{
-                  fontSize: 28,
-                  color: theme.palette.mode === "light" ? "#fff" : "#90caf9",
-                  filter:
-                    theme.palette.mode === "light"
-                      ? "drop-shadow(0 2px 8px #1976d2)"
-                      : "drop-shadow(0 2px 8px #23272f)",
-                }}
-              />
-            </Avatar>
-            <Typography
-              variant="h4"
-              sx={{
-                fontWeight: 900,
-                fontFamily: "Montserrat, Poppins, Arial",
-                userSelect: "none",
-                letterSpacing: 2.5,
-                fontSize: { xs: 22, md: 32 },
-                lineHeight: 1.1,
-                textShadow:
-                  theme.palette.mode === "light"
-                    ? "0 2px 16px #1976d2, 0 1px 0 #fff, 0 0 2px #42a5f5"
-                    : "0 2px 12px #42a5f5, 0 1px 0 #90caf9, 0 0 2px #e3f2fd",
-                background:
-                  theme.palette.mode === "light"
-                    ? "linear-gradient(90deg, #1976d2 60%, #42a5f5 100%)"
-                    : "linear-gradient(90deg, #42a5f5 60%, #90caf9 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-                mb: 0.5,
-                px: 0.5,
-              }}
-            >
-              Stockify
-            </Typography>
+            />
           </Box>
 
           {/* RIGHT BUTTONS */}
