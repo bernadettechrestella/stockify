@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: "https://stockify-production-1358.up.railway.app/api",
   withCredentials: true, // <-- penting untuk cookie refresh token
 });
 
