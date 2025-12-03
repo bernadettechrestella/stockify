@@ -3,9 +3,17 @@ const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
+const allowedOrigins = [
+    "http://localhost:5173", // sesuaikan dengan frontend URL
+    "https://stockify-production-1358.up.railway.app", //URL production
+];
+
+
 // Middleware
 app.use(cors({
-    origin: "http://localhost:5173", // sesuaikan dengan frontend URL
+    origin: function (origin, callback) {
+        callback(null, allowedOrigins.includes(origin) || !origin);
+    },
     credentials: true,
 }));
 app.use(express.json());
