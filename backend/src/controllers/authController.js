@@ -5,6 +5,12 @@ const dbQuery = require("../utils/dbQuery");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+// Fungsi untuk register user baru
+// 1. Validasi input
+// 2. Cek apakah email sudah terdaftar
+// 3. Hash password
+// 4. Simpan user ke database
+// 5. Response sukses
 exports.register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
@@ -19,6 +25,13 @@ exports.register = asyncHandler(async (req, res) => {
   return success(res, "User registered successfully", null, 201);
 });
 
+// Fungsi untuk login user
+// 1. Validasi input
+// 2. Cari user berdasarkan email
+// 3. Cek password
+// 4. Generate accessToken & refreshToken
+// 5. Simpan refreshToken di cookie
+// 6. Response accessToken
 exports.login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -52,6 +65,11 @@ exports.login = asyncHandler(async (req, res) => {
   return success(res, "Login successful", { accessToken });
 });
 
+// Fungsi untuk refresh accessToken menggunakan refreshToken dari cookie
+// 1. Ambil refreshToken dari cookie
+// 2. Verifikasi refreshToken
+// 3. Generate accessToken baru
+// 4. Response accessToken
 exports.refresh = asyncHandler((req, res, next) => {
   const token = req.cookies.refreshToken;
   if (!token) return error(res, "No refresh token", 401);
@@ -66,6 +84,9 @@ exports.refresh = asyncHandler((req, res, next) => {
   });
 });
 
+// Fungsi untuk logout user
+// 1. Hapus cookie refreshToken
+// 2. Response sukses
 exports.logout = asyncHandler((req, res, next) => {
   res.clearCookie("refreshToken", {
     httpOnly: true,

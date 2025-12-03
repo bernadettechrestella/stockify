@@ -1,5 +1,10 @@
 const jwt = require("jsonwebtoken");
 
+// Middleware untuk verifikasi JWT token
+// 1. Ambil token dari header Authorization
+// 2. Verifikasi token
+// 3. Jika valid, lanjut ke next middleware
+// 4. Jika tidak valid, kirim error
 const authMiddleware = (req, res, next) => {
   // 1. Ambil token dari header Authorization
   const authHeader = req.headers["authorization"];

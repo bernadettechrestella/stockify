@@ -4,6 +4,11 @@ const asyncHandler = require("../utils/asyncHandler");
 const dbQuery = require("../utils/dbQuery");
 
 // CREATE PRODUCT
+// Fungsi untuk membuat produk baru
+// 1. Validasi input
+// 2. Cek apakah nama produk sudah ada
+// 3. Simpan produk ke database
+// 4. Response sukses
 exports.createProduct = asyncHandler(async (req, res) => {
   const { name, stock, price, category_id } = req.body;
   if (!name || !stock || !price || !category_id) {
@@ -18,6 +23,11 @@ exports.createProduct = asyncHandler(async (req, res) => {
 });
 
 
+// Fungsi untuk mengambil semua produk (dengan filter, search, dan pagination)
+// 1. Build query sesuai filter/search
+// 2. Query produk dari database
+// 3. Format data (price jadi number)
+// 4. Response data produk
 exports.getProducts = asyncHandler(async (req, res) => {
   const { category, search, page = 1, limit = 10 } = req.query;
   const offset = (page - 1) * limit;
@@ -50,6 +60,11 @@ exports.getProducts = asyncHandler(async (req, res) => {
   return success(res, "Products fetched successfully", formatted);
 });
 
+// Fungsi untuk update produk
+// 1. Validasi input
+// 2. Cek kategori dan produk ada
+// 3. Update produk di database
+// 4. Response sukses
 exports.updateProduct = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { name, stock, price, category_id } = req.body;
@@ -70,6 +85,11 @@ exports.updateProduct = asyncHandler(async (req, res) => {
   return success(res, "Product updated successfully");
 });
 
+// Fungsi untuk hapus produk
+// 1. Cek produk ada
+// 2. Cek stok harus 0
+// 3. Hapus produk dari database
+// 4. Response sukses
 exports.deleteProduct = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const product = await dbQuery("SELECT stock FROM products WHERE id = ?", [id]);
@@ -80,6 +100,9 @@ exports.deleteProduct = asyncHandler(async (req, res) => {
   await dbQuery("DELETE FROM products WHERE id = ?", [id]);
   return success(res, "Product deleted successfully");
 });
+// Fungsi untuk mengambil statistik produk/kategori
+// 1. Query total produk, kategori, dan produk stok rendah
+// 2. Response data statistik
 exports.getStats = asyncHandler(async (req, res) => {
   const queries = {
     totalProducts: "SELECT COUNT(*) AS total FROM products",
