@@ -5,7 +5,8 @@ const cookieParser = require("cookie-parser");
 
 const allowedOrigins = [
     "http://localhost:5173", // sesuaikan dengan frontend URL
-    "https://stockify-production-1358.up.railway.app", //URL production
+    "https://stockify-production-1358.up.railway.app", //URL production backend
+    "https://stockify-lac.vercel.app" //URL production frontend
 ];
 
 
