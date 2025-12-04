@@ -34,8 +34,8 @@ export default function ProductTableTemplate({
   editOpen,
   setEditOpen,
   handleUpdate,
-  editCategoryId,
-  setEditCategoryId,
+  categoryFormId,
+  setCategoryFormId,
   handleEditOpen,
   deleteOpen,
   setDeleteOpen,
@@ -59,8 +59,8 @@ export default function ProductTableTemplate({
         mt: 2,
         background:
           theme.palette.mode === "light"
-            ? "linear-gradient(120deg, #e3f2fd 0%, #90caf9 100%)"
-            : "linear-gradient(120deg, #23272f 0%, #1976d2 100%)",
+            ? theme.palette.grey[100]
+            : theme.palette.grey[900],
         boxShadow: "0 8px 32px rgba(25, 118, 210, 0.10)",
         backdropFilter: "blur(2px)",
         transition: "0.3s",
@@ -252,8 +252,8 @@ export default function ProductTableTemplate({
         setStock={setStock}
         price={price}
         setPrice={setPrice}
-        categoryId={categoryId}
-        setCategoryId={setCategoryId}
+        categoryFormId={categoryFormId}
+        setCategoryFormId={setCategoryFormId}
         categories={categories}
         submitLabel="Save"
       />
@@ -270,8 +270,8 @@ export default function ProductTableTemplate({
         setStock={setStock}
         price={price}
         setPrice={setPrice}
-        categoryId={editCategoryId}
-        setCategoryId={setEditCategoryId}
+        categoryFormId={categoryFormId}
+        setCategoryFormId={setCategoryFormId}
         categories={categories}
         submitLabel="Update"
       />

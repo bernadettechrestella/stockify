@@ -128,6 +128,9 @@ export default function ProductTableGrid({ rows, onEdit, onDelete }) {
             minWidth: "unset",
             maxWidth: "unset",
           },
+          "& .MuiDataGrid-cell:focus, & .MuiDataGrid-cell:focus-within": {
+            outline: "none",
+          },
           "& .MuiDataGrid-virtualScroller": {
             overflowX: { xs: "auto !important", md: "hidden" },
           },

@@ -1,17 +1,11 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  fetchProducts,
-  addProduct,
-  updateProduct,
-  deleteProduct,
-} from "../store/productSlice";
 import { useTheme, useMediaQuery } from "@mui/material";
 import { toast } from "react-toastify";
 import useCategories from "../api/useCategories";
 import { useAuth } from "../context/AuthContext";
-import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import ProductTableTemplate from "./templates/ProductTableTemplate";
+import { productAsyncActions } from "../store/asyncAction";
 
 export default function ProductTable() {
   const theme = useTheme();
@@ -29,7 +23,7 @@ export default function ProductTable() {
   const [deleteId, setDeleteId] = useState(null);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const { token, loading: authLoading } = useAuth();
-  const [editCategoryId, setEditCategoryId] = useState("");
+  const [categoryFormId, setCategoryFormId] = useState("");
 
   const {
     items: rows,
@@ -39,7 +33,9 @@ export default function ProductTable() {
 
   useEffect(() => {
     if (!authLoading && token) {
-      dispatch(fetchProducts({ search, category: categoryId }));
+      dispatch(
+        productAsyncActions.fetchProducts({ search, category: categoryId })
+      );
     }
   }, [dispatch, search, categoryId, authLoading, token]);
 
@@ -50,21 +46,23 @@ export default function ProductTable() {
   }, [error]);
 
   const handleAdd = async () => {
-    if (!name || !stock || !price || !categoryId) {
+    if (!name || !stock || !price || !categoryFormId) {
       return toast.error("All fields are required!");
     }
     try {
       await dispatch(
-        addProduct({
+        productAsyncActions.addProduct({
           name,
           stock: Number(stock),
           price: Number(price),
-          category_id: Number(categoryId),
+          category_id: Number(categoryFormId),
         })
       ).unwrap();
       toast.success("Product added successfully");
       setOpen(false);
-      dispatch(fetchProducts({ search, category: categoryId }));
+      dispatch(
+        productAsyncActions.fetchProducts({ search, category: categoryId })
+      );
     } catch (err) {
       toast.error(err || "Failed to add product");
     }
@@ -75,29 +73,31 @@ export default function ProductTable() {
     setName(row.name);
     setStock(row.stock);
     setPrice(row.price);
-    setEditCategoryId(row.category_id);
+    setCategoryFormId(row.category_id);
     setEditOpen(true);
   };
 
   const handleUpdate = async () => {
-    if (!name || !stock || !price || !editCategoryId) {
+    if (!name || !stock || !price || !categoryFormId) {
       return toast.error("All fields are required!");
     }
     try {
       await dispatch(
-        updateProduct({
+        productAsyncActions.updateProduct({
           id: editId,
           product: {
             name,
             stock: Number(stock),
             price: Number(price),
-            category_id: Number(editCategoryId),
+            category_id: Number(categoryFormId),
           },
         })
       ).unwrap();
       toast.success("Product updated successfully");
       setEditOpen(false);
-      dispatch(fetchProducts({ search, category: categoryId }));
+      dispatch(
+        productAsyncActions.fetchProducts({ search, category: categoryId })
+      );
     } catch (err) {
       setEditOpen(true);
       toast.error(err || "Failed to update product");
@@ -111,9 +111,11 @@ export default function ProductTable() {
 
   const handleDelete = async () => {
     try {
-      await dispatch(deleteProduct(deleteId)).unwrap();
+      await dispatch(productAsyncActions.deleteProduct(deleteId)).unwrap();
       setDeleteOpen(false);
-      dispatch(fetchProducts({ search, category: categoryId }));
+      dispatch(
+        productAsyncActions.fetchProducts({ search, category: categoryId })
+      );
       toast.success("Product deleted successfully");
     } catch (err) {
       toast.error(err || "Failed to delete product");
@@ -145,14 +147,14 @@ export default function ProductTable() {
       setEditOpen={setEditOpen}
       handleUpdate={handleUpdate}
       editId={editId}
-      editCategoryId={editCategoryId}
-      setEditCategoryId={setEditCategoryId}
+      categoryFormId={categoryFormId}
+      setCategoryFormId={setCategoryFormId}
       handleEditOpen={handleEditOpen}
       deleteOpen={deleteOpen}
       setDeleteOpen={setDeleteOpen}
       handleDelete={handleDelete}
       handleDeleteConfirmOpen={handleDeleteConfirmOpen}
-      fetchProducts={fetchProducts}
+      fetchProducts={productAsyncActions.fetchProducts}
     />
   );
 }

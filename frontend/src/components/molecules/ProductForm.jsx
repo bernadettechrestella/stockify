@@ -23,8 +23,8 @@ export default function ProductForm({
   setStock,
   price,
   setPrice,
-  categoryId,
-  setCategoryId,
+  categoryFormId,
+  setCategoryFormId,
   categories,
   submitLabel,
 }) {
@@ -168,8 +168,8 @@ export default function ProductForm({
           Category
         </Typography>
         <Select
-          value={categoryId}
-          onChange={(e) => setCategoryId(e.target.value)}
+          value={categoryFormId}
+          onChange={(e) => setCategoryFormId(e.target.value)}
           displayEmpty
           variant="outlined"
           sx={{

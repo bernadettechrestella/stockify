@@ -1,20 +1,22 @@
 import axios from '../api/axios';
 
-export const fetchProductsApi = async (search, category) => {
-  const res = await axios.get('/products', {
-    params: { search, category },
-  });
-  return res.data.data;
-};
+export class ProductService {
+  async fetchProducts(search, category) {
+    const res = await axios.get('/products', {
+      params: { search, category },
+    });
+    return res.data.data;
+  }
 
-export const addProductApi = async (product) => {
-  await axios.post('/products', product);
-};
+  async addProduct(product) {
+    await axios.post('/products', product);
+  }
 
-export const updateProductApi = async (id, product) => {
-  await axios.put(`/products/${id}`, product);
-};
+  async updateProduct(id, product) {
+    await axios.put(`/products/${id}`, product);
+  }
 
-export const deleteProductApi = async (id) => {
-  await axios.delete(`/products/${id}`);
-};
+  async deleteProduct(id) {
+    await axios.delete(`/products/${id}`);
+  }
+}
