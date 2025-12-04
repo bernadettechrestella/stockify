@@ -129,13 +129,19 @@ export default function ProductForm({
         <TextField
           type="text"
           value={
-            price !== "" ? `Rp ${Number(price).toLocaleString("id-ID")}` : ""
+            price === ""
+              ? ""
+              : Number(price.replace(/\./g, "")).toLocaleString("id-ID")
           }
           onChange={(e) => {
-            // Remove non-digit chars except comma/dot for decimals
-            const raw = e.target.value
-              .replace(/[^\d.,]/g, "")
-              .replace(/,/g, ".");
+            // Ambil value mentah, hapus semua non-digit
+            let raw = e.target.value.replace(/\D/g, "");
+
+            // Hilangkan leading zero (kecuali input "0" saja)
+            if (raw.length > 1 && raw.startsWith("0")) {
+              raw = raw.replace(/^0+/, "");
+            }
+
             setPrice(raw);
           }}
           variant="outlined"

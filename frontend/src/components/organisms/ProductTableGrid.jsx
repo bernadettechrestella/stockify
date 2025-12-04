@@ -80,6 +80,7 @@ export default function ProductTableGrid({ rows, onEdit, onDelete }) {
         getRowClassName={(params) => {
           return params.row.stock <= 5 ? "low-stock" : "";
         }}
+        getRowId={(row) => row.id}
         sx={{
           minWidth: { xs: 600, sm: 700, md: "100%" },
           width: "100%",
