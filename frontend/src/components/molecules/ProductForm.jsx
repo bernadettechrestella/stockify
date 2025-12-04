@@ -128,7 +128,9 @@ export default function ProductForm({
         </Typography>
         <TextField
           type="text"
-          value={price ? `Rp ${Number(price).toLocaleString("id-ID")}` : ""}
+          value={
+            price !== "" ? `Rp ${Number(price).toLocaleString("id-ID")}` : ""
+          }
           onChange={(e) => {
             // Remove non-digit chars except comma/dot for decimals
             const raw = e.target.value

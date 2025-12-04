@@ -10,7 +10,7 @@ require("dotenv").config({
 
 const isProduction = process.env.NODE_ENV === "production";
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
@@ -21,6 +21,9 @@ const db = mysql.createConnection({
         rejectUnauthorized: false,
       }
     : false,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
 });
 
 db.connect((err) => {
@@ -31,4 +34,4 @@ db.connect((err) => {
   }
 });
 
-module.exports = db;
+module.exports = db.promise();
