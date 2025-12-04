@@ -5,7 +5,6 @@ const cookieParser = require("cookie-parser");
 
 const allowedOrigins = [
     "http://localhost:5173", // sesuaikan dengan frontend URL
-    "https://stockify-production-1358.up.railway.app", //URL production backend
     "https://stockify-lac.vercel.app" //URL production frontend
 ];
 
@@ -13,7 +12,11 @@ const allowedOrigins = [
 // Middleware
 app.use(cors({
     origin: function (origin, callback) {
-        callback(null, allowedOrigins.includes(origin) || !origin);
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true)
+        } else {
+            callback(new Error("Not allowed by CORS"))
+        }
     },
     credentials: true,
 }));

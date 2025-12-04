@@ -59,7 +59,7 @@ exports.login = asyncHandler(async (req, res) => {
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     secure: false, // set to true in production
-    sameSite: "Strict",
+    sameSite: "none",
     path: "/",
   });
   return success(res, "Login successful", { accessToken });
@@ -91,7 +91,7 @@ exports.logout = asyncHandler((req, res, next) => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
     secure: false,
-    sameSite: "strict",
+    sameSite: "none",
     path: "/"
   });
   return success(res, "Logout successful");
