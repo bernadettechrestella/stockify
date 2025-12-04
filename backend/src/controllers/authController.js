@@ -58,7 +58,7 @@ exports.login = asyncHandler(async (req, res) => {
   );
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: false, // set to true in production
+    secure: process.env.NODE_ENV === "production",
     sameSite: "none",
     path: "/",
   });
@@ -90,7 +90,7 @@ exports.refresh = asyncHandler((req, res, next) => {
 exports.logout = asyncHandler((req, res, next) => {
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: false,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "none",
     path: "/"
   });
